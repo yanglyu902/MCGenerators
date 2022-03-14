@@ -155,8 +155,8 @@ int main( int argc, char** argv) {
   // vecMaterials.push_back( "G4_Al" );
   // vecMaterials.push_back( "G4_Si" );
   // vecMaterials.push_back( "G4_Ar" );
-  // vecMaterials.push_back( "G4_Fe" );
-  // vecMaterials.push_back( "G4_Cu" );
+//   vecMaterials.push_back( "G4_Fe" );
+//   vecMaterials.push_back( "G4_Cu" );
   // vecMaterials.push_back( "G4_W" );
   // vecMaterials.push_back( "G4_Pb" );
 
@@ -190,14 +190,15 @@ int main( int argc, char** argv) {
     return 2;
   }
 
-  
+
   // Loop over the collisions
   G4double rnd1, rnd2, rnd3, rnd4, rnd5, rnd6, normalization, projectileEnergy;
   G4VParticleChange* aChange = nullptr;
 
   // output name
   std::ofstream outfile(outname.c_str(), std::ofstream::out);
-  const G4double PionMass = 139.570 ; // MeV
+  const G4double PionMass = 139.570; // MeV
+  const G4double KaonMass = 493.677; //MeV
   for ( G4int i = 0; i < numCollisions; ++i ) {
     // Draw some random numbers to select the hadron-nucleus interaction:
     // projectile hadron, projectile kinetic energy, projectile direction, and target material.
@@ -209,7 +210,7 @@ int main( int argc, char** argv) {
     rnd6 = CLHEP::HepRandom::getTheEngine()->flat();
     // Sample the projectile kinetic energy
     // projectileEnergy = minEnergy + rnd1*( maxEnergy - minEnergy );
-    projectileEnergy = 30.0*CLHEP::GeV;
+    projectileEnergy = 25.0*CLHEP::GeV; // TODO: change here (default: 30 GeV)
 
     if ( projectileEnergy <= 0.0 ) projectileEnergy = minEnergy; 
     // Sample the projectile direction
@@ -235,7 +236,8 @@ int main( int argc, char** argv) {
     //***********************************************************************************************************
     G4int nsec = aChange ? aChange->GetNumberOfSecondaries() : 0;
 
-    G4double pion_p2 = sqrt(projectileEnergy*projectileEnergy - PionMass*PionMass);
+    // NOTE: |p|^2 = KE^2 + 2 * KE * m [MeV]
+    G4double pion_p2 = sqrt(projectileEnergy*projectileEnergy + 2 * projectileEnergy * PionMass);
     G4double pion_px = pion_p2*aDirection.x();
     G4double pion_py = pion_p2*aDirection.y();
     G4double pion_pz = pion_p2*aDirection.z();
@@ -244,14 +246,15 @@ int main( int argc, char** argv) {
 
     // outfile << "-211 " << aDirection.x() <<  " " << aDirection.y() << " " << aDirection.z() << " " << projectileEnergy;
 
-    outfile << "-211 " << projectileEnergy << " " << pion_px <<  " " << pion_py << " " << pion_pz;
+    // NOTE: I changed output file format
+    outfile << "-211 " << projectileEnergy << " " << pion_px <<  " " << pion_py << " " << pion_pz << " " << nsec;
 
     // Loop over produced secondaries and print out some information:
     // for each collision, the number of secondaries; every 100 collisions, the list of secondaries.
     for ( G4int j = 0; j < nsec; ++j ) {
       const G4DynamicParticle* sec = aChange->GetSecondary(j)->GetDynamicParticle();
       if ( verbose && i%100 == 0 ) { 
-        G4cout << "\t j=" << j << "\t" << sec->GetDefinition()->GetParticleName() 
+        G4cout << "\t   j=" << j << "\t" << sec->GetDefinition()->GetParticleName() 
           << "\t" << sec->GetDefinition()->GetPDGEncoding()
 				  << "\t p=" << sec->Get4Momentum() << " MeV" << G4endl;
       }
