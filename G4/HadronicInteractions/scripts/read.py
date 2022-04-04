@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # %% 
-filename = '../build/pion_minus_H.csv'
+filename = '../build/pion_30GeV_Fe_100K.csv'
 
 data = None
 with open(filename, 'r') as f:
