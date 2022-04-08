@@ -55,8 +55,8 @@ int main( int argc, char** argv) {
     G4cout << "=== Test of the HadronicGenerator ===" << G4endl;
     int opt;
     int n_evts = 10;
-    double min_energy = 15.0;
-    double max_energy = 30.0;
+    double min_energy = 0.5; // TODO: default: 15.0
+    double max_energy = 15.0; // TODO: default: 30.0
     double p_energy = 25.0; // projectile energy in GeV
 
     std::string outname("pion_minus_H.csv");
@@ -214,8 +214,8 @@ int main( int argc, char** argv) {
         rnd5 = CLHEP::HepRandom::getTheEngine()->flat();
         rnd6 = CLHEP::HepRandom::getTheEngine()->flat();
         // Sample the projectile kinetic energy
-        // projectileEnergy = minEnergy + rnd1*( maxEnergy - minEnergy );
-        projectileEnergy = p_energy*CLHEP::GeV; // TODO: change here (default: 25 GeV)
+        projectileEnergy = minEnergy + rnd1*( maxEnergy - minEnergy ); // TODO: change here
+        // projectileEnergy = p_energy*CLHEP::GeV; // TODO: change here (default: 25 GeV)
 
         if ( projectileEnergy <= 0.0 ) projectileEnergy = minEnergy; 
         // Sample the projectile direction

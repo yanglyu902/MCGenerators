@@ -65,7 +65,7 @@ def plot_nsec_distribution(projectile, energy, target, nevents, randE, randDir, 
 #                        bins=np.linspace(0,75,20))
 
 
-# combined plot
+""" combined plot of all generation energies """
 projectile = 'pion'
 target='Fe'
 nevents='1M'
@@ -80,13 +80,13 @@ nsec_30 = np.loadtxt(f'../build/{projectile}_30GeV_{target}_{nevents}.csv', usec
 
 plt.figure(figsize=(10,8))
 
-plt.hist(nsec_01, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 100 MeV')
-plt.hist(nsec_05, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 500 MeV')
-plt.hist(nsec_10, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 10 GeV')
-plt.hist(nsec_15, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 15 GeV')
-plt.hist(nsec_20, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 20 GeV')
-plt.hist(nsec_25, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 25 GeV')
-plt.hist(nsec_30, bins=np.arange(0,76,2), density=True, histtype='step', label=f'Energy: 30 GeV')
+plt.hist(nsec_01, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 100 MeV')
+plt.hist(nsec_05, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 500 MeV')
+plt.hist(nsec_10, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 10 GeV')
+plt.hist(nsec_15, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 15 GeV')
+plt.hist(nsec_20, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 20 GeV')
+plt.hist(nsec_25, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 25 GeV')
+plt.hist(nsec_30, bins=np.arange(0,76,1), density=True, histtype='step', label=f'Energy: 30 GeV')
 
 plt.xlabel('Number of secondary particles')
 plt.ylabel('Fraction of events')
