@@ -57,7 +57,7 @@ int main( int argc, char** argv) {
     int n_evts = 10;
     double min_energy = 0.5; // TODO: default: 15.0
     double max_energy = 15.0; // TODO: default: 30.0
-    double p_energy = 25.0; // projectile energy in GeV
+    double p_energy = -1; // projectile energy in GeV
 
     std::string outname("pion_minus_H.csv");
     bool verbose = false;
@@ -159,8 +159,8 @@ int main( int argc, char** argv) {
     // vecMaterials.push_back( "G4_Al" );
     // vecMaterials.push_back( "G4_Si" );
     // vecMaterials.push_back( "G4_Ar" );
-    vecMaterials.push_back( "G4_Fe" );
-    //   vecMaterials.push_back( "G4_Cu" );
+    // vecMaterials.push_back( "G4_Fe" );
+      vecMaterials.push_back( "G4_Cu" );
     // vecMaterials.push_back( "G4_W" );
     // vecMaterials.push_back( "G4_Pb" );
 
@@ -214,8 +214,12 @@ int main( int argc, char** argv) {
         rnd5 = CLHEP::HepRandom::getTheEngine()->flat();
         rnd6 = CLHEP::HepRandom::getTheEngine()->flat();
         // Sample the projectile kinetic energy
-        projectileEnergy = minEnergy + rnd1*( maxEnergy - minEnergy ); // TODO: change here
-        // projectileEnergy = p_energy*CLHEP::GeV; // TODO: change here (default: 25 GeV)
+        if (p_energy != -1) {
+            projectileEnergy = p_energy*CLHEP::GeV; // TODO: change here (default: 25 GeV)
+        } else {
+            projectileEnergy = minEnergy + rnd1*( maxEnergy - minEnergy ); // TODO: change here
+        }
+
 
         if ( projectileEnergy <= 0.0 ) projectileEnergy = minEnergy; 
         // Sample the projectile direction

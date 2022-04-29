@@ -515,8 +515,8 @@ HadronicGenerator::HadronicGenerator( const G4String physicsCase ) :
     theIonBICmodel->SetMaxEnergy( bertMaxE );
     theFTFPmodel_halfConstrained->SetMinEnergy( ftfpMinE );
     if ( thePhysicsCase == "FTFP_BERT_ATL" ) {
-      theBERTmodel->SetMaxEnergy( bertMaxE_ATL );
-      theFTFPmodel_constrained->SetMinEnergy( ftfpMinE_ATL );
+      theBERTmodel->SetMaxEnergy( bertMaxE_ATL ); // 12 GeV
+      theFTFPmodel_constrained->SetMinEnergy( ftfpMinE_ATL ); // 9 GeV
     } else {
       theBERTmodel->SetMaxEnergy( bertMaxE );
       theFTFPmodel_constrained->SetMinEnergy( ftfpMinE );
