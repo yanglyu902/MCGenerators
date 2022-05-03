@@ -58,11 +58,12 @@ int main( int argc, char** argv) {
     double min_energy = 0.5; // TODO: default: 15.0
     double max_energy = 15.0; // TODO: default: 30.0
     double p_energy = -1; // projectile energy in GeV
+    int curr_material = -1; // material atomic mass: 56 for Fe, 64 for Cu
 
     std::string outname("pion_minus_H.csv");
     bool verbose = false;
     bool help = false;
-    while ((opt = getopt(argc, argv, "n:o:v:t:b:e:h")) != -1) {
+    while ((opt = getopt(argc, argv, "n:o:v:t:b:e:m:h")) != -1) {
         switch (opt) {
             case 'n':
                 n_evts = atoi(optarg);
@@ -82,10 +83,13 @@ int main( int argc, char** argv) {
             case 'e':
                 p_energy = atof(optarg);
                 break;
+            case 'm':
+                curr_material = atoi(optarg);
+                break;
             case 'h':
                 help = true;
             default:
-                fprintf(stderr, "Usage: %s [-hv] [-n NUM_EVTS] [-o OUTNAME] [-b MIN_ENERGY] [-t MAX_ENERGY]\n",
+                fprintf(stderr, "Usage: %s [-hv] [-n NUM_EVTS] [-o OUTNAME] [-m MATERIAL] [-b MIN_ENERGY] [-t MAX_ENERGY]\n",
                                     argv[0]);
             if (help) {
                 printf("         -n NUM_EVTS: number of events to be generated. Default is 10\n");
@@ -160,7 +164,14 @@ int main( int argc, char** argv) {
     // vecMaterials.push_back( "G4_Si" );
     // vecMaterials.push_back( "G4_Ar" );
     // vecMaterials.push_back( "G4_Fe" );
-      vecMaterials.push_back( "G4_Cu" );
+    std::cout << curr_material << std::endl;
+    if (curr_material == 56) {
+        vecMaterials.push_back( "G4_Fe" );
+    }
+    if (curr_material == 64) {
+        vecMaterials.push_back( "G4_Cu" );
+    }
+
     // vecMaterials.push_back( "G4_W" );
     // vecMaterials.push_back( "G4_Pb" );
 
@@ -256,8 +267,9 @@ int main( int argc, char** argv) {
         // outfile << "-211 " << aDirection.x() <<  " " << aDirection.y() << " " << aDirection.z() << " " << projectileEnergy;
 
         // NOTE: I changed output file format
-        outfile << "-211 " << projectileEnergy << " " << pion_px <<  " " << pion_py << " " << pion_pz << " " << nsec;
+        outfile << "-211 " << projectileEnergy << " " << pion_px <<  " " << pion_py << " " << pion_pz << " " << curr_material << " " << nsec;
 
+        /**  // do not need these info...
         // Loop over produced secondaries and print out some information:
         // for each collision, the number of secondaries; every 100 collisions, the list of secondaries.
         for ( G4int j = 0; j < nsec; ++j ) {
@@ -272,9 +284,10 @@ int main( int argc, char** argv) {
             << sec->Get4Momentum().e() << " " << sec->Get4Momentum().px() 
             << " " << sec->Get4Momentum().py() << " " << sec->Get4Momentum().pz();
 
-
         delete aChange->GetSecondary(j);
         }
+        **/
+
         outfile << "\n";
         // G4cout << "--------\n";
         if ( aChange ) aChange->Clear();
